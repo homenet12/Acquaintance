@@ -10,6 +10,8 @@ class MainPage extends StatefulWidget {
 class MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return LoginPage();
+    return Scaffold(
+      body: Center(child: Text("test!!")),
+    );
   }
 }

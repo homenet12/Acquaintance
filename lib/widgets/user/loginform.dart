@@ -3,6 +3,7 @@ import 'package:acquaintance/pages/mainpage.dart';
 import 'package:acquaintance/services/user/userservice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -24,7 +26,7 @@ class LoginFormState extends State<LoginForm> {
             controller: emailController,
             onChanged: (email) {
               setState(() {
-                emailController.text = email;
+                //emailController.text = email;
               });
             },
             validator: (email) {
@@ -38,9 +40,7 @@ class LoginFormState extends State<LoginForm> {
             controller: passController,
             obscureText: true,
             onChanged: (password) {
-              setState(() {
-                passController.text = password;
-              });
+              setState(() {});
             },
             validator: (password) {
               if (password.isEmpty) {
@@ -50,12 +50,14 @@ class LoginFormState extends State<LoginForm> {
             },
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (_formKey.currentState.validate()) {
-                User user = new User();
-                user.email = emailController.text;
-                user.password = passController.text;
-                bool isLogin = userService.isLogin(user);
+                String email = emailController.text;
+                String password = passController.text;
+                print(email);
+                print(password);
+
+                bool isLogin = await userService.isLogin(email, password);
                 if (isLogin) {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => MainPage()));
