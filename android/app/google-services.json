@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "108047097849",
+    "project_id": "acquaintance-e7329",
+    "storage_bucket": "acquaintance-e7329.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108047097849:android:6bbea77291bd80b42b6728",
+        "android_client_info": {
+          "package_name": "com.example.acquaintance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "108047097849-92aa6h9j2fqqt4fog2t07utbodt00t62.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmTaQfDChPwClOUQk27gf6re1p1WyvDMc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "108047097849-92aa6h9j2fqqt4fog2t07utbodt00t62.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
