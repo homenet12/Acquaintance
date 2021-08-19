@@ -1,3 +1,5 @@
+import 'package:acquaintance/pages/helppage.dart';
+import 'package:acquaintance/pages/signuppage.dart';
 import 'package:acquaintance/widgets/user/loginform.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,9 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
+    final avdHeight = MediaQuery.of(context).size.height;
+    final avdWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Container(
         child: Stack(
@@ -16,30 +21,39 @@ class LoginPageState extends State<LoginPage> {
           alignment: Alignment.center,
           children: <Widget>[
             Container(
-              height: MediaQuery.of(context).size.height / 2,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xff519CFE),
-                    Color(0xff8DA1FE),
-                    Color(0xffC291FE)
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0.7, 0.8, 1.0],
-                ),
+              height: avdHeight,
+              child: Column(
+                children: [
+                  Container(
+                    height: avdHeight / 2,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xff519CFE),
+                          Color(0xff8DA1FE),
+                          Color(0xffC291FE)
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [0.7, 0.8, 1.0],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Positioned(
               width: 300,
               height: 300,
+              top: avdHeight / 20,
               child: Container(
                 child: Image.asset("images/bbam.PNG"),
               ),
             ),
             Positioned(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 3,
+              width: avdWidth,
+              height: avdHeight / 3,
+              top: avdHeight / 2.5,
               child: Container(
                 margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Card(
@@ -50,12 +64,11 @@ class LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              bottom: (MediaQuery.of(context).size.height / 4) * -1,
             ),
             Positioned(
               width: 200.0,
               height: 50.0,
-              bottom: (MediaQuery.of(context).size.height / 3.6) * -1,
+              top: avdHeight / 1.43,
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -74,7 +87,15 @@ class LoginPageState extends State<LoginPage> {
                   color: Colors.transparent,
                   child: InkWell(
                     splashColor: Colors.white,
-                    onTap: () {},
+                    onTap: () {
+                      print("Login!!");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HelpPage(),
+                        ),
+                      );
+                    },
                     child: Center(
                       child: Text(
                         "로그인",
@@ -92,12 +113,23 @@ class LoginPageState extends State<LoginPage> {
             Positioned(
               width: 200,
               height: 200,
-              bottom: (MediaQuery.of(context).size.height / 1.6) * -1,
+              top: avdHeight / 1.2,
               child: Column(
                 children: [
-                  Text(
-                    "your don't have ID?",
-                    style: TextStyle(color: Colors.grey),
+                  TextButton(
+                    onPressed: () {
+                      print("sign up!");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignUpPage(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "your don't have ID?",
+                      style: TextStyle(color: Colors.grey),
+                    ),
                   ),
                   Text(
                     "find password",

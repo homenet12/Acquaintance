@@ -27,6 +27,9 @@ class LoginFormState extends State<LoginForm> {
                 Container(
                   width: 200,
                   child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "email@email.com",
+                    ),
                     controller: emailController,
                     onChanged: (email) {},
                     validator: (email) {
