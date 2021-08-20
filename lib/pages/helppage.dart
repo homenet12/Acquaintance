@@ -1,6 +1,6 @@
+import 'package:acquaintance/pages/mainpage.dart';
 import 'package:flutter/material.dart';
-import 'package:intro_slider/intro_slider.dart';
-import 'package:intro_slider/slide_object.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 
 class HelpPage extends StatefulWidget {
   HelpPage({Key key}) : super(key: key);
@@ -11,149 +11,118 @@ class HelpPage extends StatefulWidget {
 
 // ------------------ Custom config ------------------
 class HelpPageState extends State<HelpPage> {
-  List<Slide> slides = [];
+  final GlobalKey<IntroductionScreenState> _introKey =
+      GlobalKey<IntroductionScreenState>();
+  List<PageViewModel> pages = [];
 
   @override
-  void initState() {
+  initState() {
     super.initState();
+    pages.add(pageView("학습", "블록코딩을 이용하여 더욱 쉽고 재미있게 풀어보세요.",
+        Image.asset("images/intro_screen1.PNG")));
+    pages.add(pageView("대결", "다른 사용자와 대결하여 랭킹을 올려보세요.",
+        Image.asset("images/intro_screen2.PNG")));
+    pages.add(pageView("피드백", "전문적인 피드백으로 취약점을 확실히 잡아보세요.",
+        Image.asset("images/intro_screen3.PNG")));
+  }
 
-    slides.add(
-      new Slide(
-        title:
-            "A VERY LONG TITLE A VERY LONG TITLE A VERY LONG TITLE A VERY LONG TITLE A VERY LONG TITLE A VERY LONG TITLE A VERY LONG TITLE A VERY LONG TITLE A VERY LONG TITLE",
-        maxLineTitle: 2,
-        styleTitle: TextStyle(
-            color: Colors.white,
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'RobotoMono'),
-        description:
-            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,",
-        styleDescription: TextStyle(
-            color: Colors.white,
-            fontSize: 20.0,
-            fontStyle: FontStyle.italic,
-            fontFamily: 'Raleway'),
-        marginDescription:
-            EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0, bottom: 70.0),
-        centerWidget: Text("Replace this with a custom widget",
-            style: TextStyle(color: Colors.white)),
-        backgroundImage: "images/forest.png",
-        directionColorBegin: Alignment.topLeft,
-        directionColorEnd: Alignment.bottomRight,
-        onCenterItemPress: () {},
+  void _onIntroEnd(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => MainPage()),
+    );
+  }
+
+  Widget _buildImage(String assetName, [double width = 550]) {
+    return Image.asset('images/$assetName', width: width);
+  }
+
+  pageView(String title, String body, Widget image) {
+    return PageViewModel(
+      title: title,
+      image: image,
+      body: body,
+      reverse: true,
+      decoration: PageDecoration(
+        bodyAlignment: Alignment.center,
+        imageAlignment: Alignment.topCenter,
+        titleTextStyle: TextStyle(
+          fontFamily: "Youth",
+          fontSize: 25,
+        ),
+        bodyTextStyle: TextStyle(
+          fontFamily: "Youth",
+          fontSize: 15,
+        ),
       ),
-    );
-    slides.add(
-      new Slide(
-        title: "CITY",
-        styleTitle: TextStyle(
-            color: Color(0xff7FFFD4),
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'RobotoMono'),
-        description:
-            "Ye indulgence unreserved connection alteration appearance",
-        styleDescription: TextStyle(
-            color: Color(0xff7FFFD4),
-            fontSize: 20.0,
-            fontStyle: FontStyle.italic,
-            fontFamily: 'Raleway'),
-        backgroundImage: "images/city.jpeg",
-        directionColorBegin: Alignment.topRight,
-        directionColorEnd: Alignment.bottomLeft,
-      ),
-    );
-    slides.add(
-      new Slide(
-        title: "BEACH",
-        styleTitle: TextStyle(
-            color: Color(0xffFFDAB9),
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'RobotoMono'),
-        description:
-            "Much evil soon high in hope do view. Out may few northward believing attempted. Yet timed being songs marry one defer men our. Although finished blessing do of",
-        styleDescription: TextStyle(
-            color: Color(0xffFFDAB9),
-            fontSize: 20.0,
-            fontStyle: FontStyle.italic,
-            fontFamily: 'Raleway'),
-        backgroundImage: "images/beach.jpeg",
-        directionColorBegin: Alignment.topCenter,
-        directionColorEnd: Alignment.bottomCenter,
-        maxLineTextDescription: 3,
-      ),
-    );
-  }
-
-  void onDonePress() {
-    // Do what you want
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => HomeScreen()),
-    // );
-  }
-
-  Widget renderNextBtn() {
-    return Icon(
-      Icons.navigate_next,
-      color: Color(0xffF3B4BA),
-      size: 35.0,
-    );
-  }
-
-  Widget renderDoneBtn() {
-    return Icon(
-      Icons.done,
-      color: Color(0xffF3B4BA),
-    );
-  }
-
-  Widget renderSkipBtn() {
-    return Icon(
-      Icons.skip_next,
-      color: Color(0xffF3B4BA),
-    );
-  }
-
-  ButtonStyle myButtonStyle() {
-    return ButtonStyle(
-      shape: MaterialStateProperty.all<OutlinedBorder>(StadiumBorder()),
-      backgroundColor: MaterialStateProperty.all<Color>(Color(0x33F3B4BA)),
-      overlayColor: MaterialStateProperty.all<Color>(Color(0x33FFA8B0)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return new IntroSlider(
-      // List slides
-      slides: this.slides,
+    return Scaffold(
+      body: IntroductionScreen(
+        key: _introKey,
+        globalBackgroundColor: Colors.white,
+        pages: pages,
+        globalFooter: Container(
+          width: MediaQuery.of(context).size.width / 2,
+          height: 40,
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xff519CFE), Color(0xff8DA1FE), Color(0xffC291FE)],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              stops: [0.2, 0.5, 1.0],
+            ),
+            borderRadius: BorderRadius.circular(13),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              splashColor: Colors.white,
+              onTap: () {
+                print("시작하기");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HelpPage(),
+                  ),
+                );
+              },
+              child: Center(
+                child: Text(
+                  "시작하기",
+                  style: TextStyle(
+                    fontFamily: "Youth",
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        onDone: () => _onIntroEnd(context),
+        //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
+        showSkipButton: true,
+        skipFlex: 0,
+        nextFlex: 0,
+        //rtl: true, // Display as right-to-left
+        skip: const Text('Skip'),
+        next: const Icon(Icons.arrow_forward),
+        done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+        curve: Curves.fastLinearToSlowEaseIn,
 
-      // Skip button
-      //renderSkipBtn: this.renderSkipBtn(),
-      //skipButtonStyle: myButtonStyle(),
-
-      // Next button
-      //renderNextBtn: this.renderNextBtn(),
-      //nextButtonStyle: myButtonStyle(),
-
-      // Done button
-      //renderDoneBtn: this.renderDoneBtn(),
-      //onDonePress: this.onDonePress,
-      //doneButtonStyle: myButtonStyle(),
-
-      // Dot indicator
-      colorDot: Color(0x33FFA8B0),
-      colorActiveDot: Color(0xffFFA8B0),
-      sizeDot: 13.0,
-
-      // Show or hide status bar
-      hideStatusBar: true,
-      backgroundColorAllSlides: Colors.white,
-
-      // Scrollbar
+        dotsDecorator: const DotsDecorator(
+          size: Size(10.0, 10.0),
+          color: Color(0xFFBDBDBD),
+          activeSize: Size(12.0, 12.0),
+          activeShape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25.0)),
+          ),
+        ),
+      ),
     );
   }
 }
