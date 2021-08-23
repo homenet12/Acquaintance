@@ -11,6 +11,9 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+    final emailController = TextEditingController();
+    final passController = TextEditingController();
     final avdHeight = MediaQuery.of(context).size.height;
     final avdWidth = MediaQuery.of(context).size.width;
 
@@ -58,7 +61,68 @@ class LoginPageState extends State<LoginPage> {
                 margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Card(
                   elevation: 5,
-                  child: LoginForm(),
+                  child: Form(
+                    key: _formKey,
+                    child: Container(
+                      margin: EdgeInsets.all(30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text("이메일",
+                                  style: TextStyle(
+                                      fontFamily: "Youth", fontSize: 20)),
+                              Container(
+                                width: avdWidth / 2.1,
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    hintText: "email@email.com",
+                                  ),
+                                  controller: emailController,
+                                  onChanged: (email) {},
+                                  validator: (email) {
+                                    if (email.isEmpty) {
+                                      return '이메일을 입력해주세요.';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text("비밀번호",
+                                  style: TextStyle(
+                                      fontFamily: "Youth", fontSize: 20)),
+                              Container(
+                                width: avdWidth / 2.1,
+                                child: TextFormField(
+                                  controller: passController,
+                                  obscureText: true,
+                                  onChanged: (password) {
+                                    setState(() {});
+                                  },
+                                  validator: (password) {
+                                    if (password.isEmpty) {
+                                      return '비밀번호를 입력해주세요.';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

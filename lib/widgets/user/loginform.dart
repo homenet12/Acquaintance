@@ -12,6 +12,9 @@ class LoginFormState extends State<LoginForm> {
   final passController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final avdHeight = MediaQuery.of(context).size.height;
+    final avdWidth = MediaQuery.of(context).size.width;
+
     return Form(
       key: _formKey,
       child: Container(
@@ -25,7 +28,7 @@ class LoginFormState extends State<LoginForm> {
                 Text("이메일",
                     style: TextStyle(fontFamily: "Youth", fontSize: 20)),
                 Container(
-                  width: 200,
+                  width: avdWidth / 2,
                   child: TextFormField(
                     decoration: InputDecoration(
                       hintText: "email@email.com",
@@ -51,7 +54,7 @@ class LoginFormState extends State<LoginForm> {
                 Text("비밀번호",
                     style: TextStyle(fontFamily: "Youth", fontSize: 20)),
                 Container(
-                  width: 200,
+                  width: avdWidth / 2,
                   child: TextFormField(
                     controller: passController,
                     obscureText: true,

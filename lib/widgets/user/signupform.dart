@@ -18,6 +18,8 @@ class SignUpFormState extends State<SignUpForm> {
   @override
   Widget build(BuildContext context) {
     final double padding = 15;
+    final avdHeight = MediaQuery.of(context).size.height;
+    final avdWidth = MediaQuery.of(context).size.width;
 
     return Form(
       key: widget.formkey,
@@ -27,23 +29,23 @@ class SignUpFormState extends State<SignUpForm> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             joinText(),
-            joinRow("성함", "홍길동", nameController),
+            joinRow("성함", "홍길동", nameController, avdWidth),
             Padding(
               padding: EdgeInsets.fromLTRB(0, padding, 0, 0),
             ),
-            joinRow("이메일", "email@email.com", emailController),
+            joinRow("이메일", "email@email.com", emailController, avdWidth),
             Padding(
               padding: EdgeInsets.fromLTRB(0, padding, 0, 0),
             ),
-            joinRow("비밀번호", "●●●●", passController),
+            joinRow("비밀번호", "●●●●", passController, avdWidth),
             Padding(
               padding: EdgeInsets.fromLTRB(0, padding, 0, 0),
             ),
-            joinButtonRow("연락처", "010-0000-0000", phoneController),
+            joinButtonRow("연락처", "010-0000-0000", phoneController, avdWidth),
             Padding(
               padding: EdgeInsets.fromLTRB(0, padding, 0, 0),
             ),
-            joinButtonRow("인증번호", "", authController),
+            joinButtonRow("인증번호", "", authController, avdWidth),
             Padding(
               padding: EdgeInsets.fromLTRB(0, padding, 0, 0),
             ),
@@ -79,7 +81,7 @@ class SignUpFormState extends State<SignUpForm> {
   }
 
   joinRow(String title, String hintText,
-      TextEditingController textEditingController) {
+      TextEditingController textEditingController, double avdWidth) {
     bool isPassword = false;
     if (title == "패스워드") {
       isPassword = true;
@@ -95,14 +97,14 @@ class SignUpFormState extends State<SignUpForm> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
-            width: 100,
+            width: avdWidth / 4,
             child: Text(
               title,
               style: TextStyle(fontFamily: "Youth", fontSize: 20),
             ),
           ),
           Container(
-            width: 200,
+            width: avdWidth / 2,
             child: TextFormField(
               decoration: InputDecoration(
                 hintText: hintText,
@@ -125,7 +127,7 @@ class SignUpFormState extends State<SignUpForm> {
   }
 
   joinButtonRow(String title, String hintText,
-      TextEditingController textEditingController) {
+      TextEditingController textEditingController, double avdWidth) {
     String buttonName = "요청";
     if (title == "인증번호") buttonName = "확인";
     return Container(
@@ -138,14 +140,14 @@ class SignUpFormState extends State<SignUpForm> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
-            width: 100,
+            width: avdWidth / 4,
             child: Text(
               title,
               style: TextStyle(fontFamily: "Youth", fontSize: 20),
             ),
           ),
           Container(
-            width: 100,
+            width: avdWidth / 5,
             child: TextFormField(
               decoration: InputDecoration(
                 hintText: hintText,
@@ -162,7 +164,7 @@ class SignUpFormState extends State<SignUpForm> {
             padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
           ),
           Container(
-            width: 100,
+            width: avdWidth / 4,
             height: 30,
             decoration: BoxDecoration(
               color: Colors.yellow[700],
