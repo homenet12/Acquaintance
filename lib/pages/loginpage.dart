@@ -1,7 +1,9 @@
 import 'package:acquaintance/pages/helppage.dart';
 import 'package:acquaintance/pages/signuppage.dart';
+import 'package:acquaintance/services/FirebaseProvider.dart';
 import 'package:acquaintance/widgets/user/loginform.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,13 +11,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
+  FirebaseProvider fp;
+
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    final emailController = TextEditingController();
-    final passController = TextEditingController();
     final avdHeight = MediaQuery.of(context).size.height;
     final avdWidth = MediaQuery.of(context).size.width;
+    fp = Provider.of<FirebaseProvider>(context);
 
     return Scaffold(
       body: Container(
@@ -88,6 +93,7 @@ class LoginPageState extends State<LoginPage> {
                                     }
                                     return null;
                                   },
+                                  textInputAction: TextInputAction.next,
                                 ),
                               ),
                             ],
@@ -151,14 +157,31 @@ class LoginPageState extends State<LoginPage> {
                   color: Colors.transparent,
                   child: InkWell(
                     splashColor: Colors.white,
-                    onTap: () {
+                    onTap: () async {
                       print("Login!!");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HelpPage(),
-                        ),
-                      );
+
+                      bool isLogin = await fp.signInWithEmail(
+                          emailController.text, passController.text);
+                      if (isLogin) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HelpPage(),
+                          ),
+                        );
+                      } else {
+                        print("login 실패");
+                        final snackBar = SnackBar(
+                          content: const Text('아이디 혹은 비밀번호가 맞지 않습니다.'),
+                          action: SnackBarAction(
+                            label: 'Undo',
+                            onPressed: () {
+                              // Some code to undo the change.
+                            },
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
                     },
                     child: Center(
                       child: Text(

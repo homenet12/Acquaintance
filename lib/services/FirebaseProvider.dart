@@ -62,8 +62,8 @@ class FirebaseProvider with ChangeNotifier {
       return false;
     } on Exception catch (e) {
       logger.e(e.toString());
-      List<String> result = e.toString().split(", ");
-      setLastFBMessage(result[1]);
+      //List<String> result = e.toString().split(", ");
+      setLastFBMessage(e.toString());
       return false;
     }
   }

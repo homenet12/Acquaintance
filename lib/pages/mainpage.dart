@@ -11,7 +11,19 @@ class MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text("test!!")),
+      body: Container(
+        child: ListView(
+          children: <Widget>[
+            Row(),
+            Text(
+              "This Week",
+              style: TextStyle(fontFamily: "Youth", fontSize: 20),
+            ),
+            Row(),
+            Table(),
+          ],
+        ),
+      ),
     );
   }
 }

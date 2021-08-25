@@ -365,6 +365,7 @@ class SignUpPageState extends State<SignUpPage> {
                 }
                 return null;
               },
+              textInputAction: TextInputAction.next,
               obscureText: isPassword,
             ),
           ),
