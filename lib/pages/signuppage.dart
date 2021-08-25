@@ -1,6 +1,5 @@
 import 'package:acquaintance/services/FirebaseProvider.dart';
 import 'package:acquaintance/widgets/boxgradient.dart';
-import 'package:acquaintance/widgets/user/signupform.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +19,12 @@ class SignUpPageState extends State<SignUpPage> {
   final authController = TextEditingController();
   final double padding = 15;
   FirebaseProvider fp;
+
   @override
   Widget build(BuildContext context) {
-    fp = Provider.of<FirebaseProvider>(context);
     final avdHeight = MediaQuery.of(context).size.height;
     final avdWidth = MediaQuery.of(context).size.width;
-
+    fp = Provider.of<FirebaseProvider>(context);
     return Scaffold(
       body: Container(
         child: Stack(
@@ -68,12 +67,164 @@ class SignUpPageState extends State<SignUpPage> {
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, padding, 0, 0),
                           ),
-                          joinButtonRow("연락처", "010-0000-0000", phoneController,
-                              avdWidth),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                    width: 1.0, color: Colors.grey[400]),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: avdWidth / 4,
+                                  child: Text(
+                                    "연락처",
+                                    style: TextStyle(
+                                        fontFamily: "Youth", fontSize: 20),
+                                  ),
+                                ),
+                                Container(
+                                  width: avdWidth / 5,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: "+82 10-0000-",
+                                      border: InputBorder.none,
+                                    ),
+                                    controller: phoneController,
+                                    onChanged: (value) {},
+                                    validator: (value) {
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                ),
+                                Container(
+                                  width: avdWidth / 4,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    color: Colors.yellow[700],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      splashColor: Colors.white,
+                                      onTap: () async {
+                                        print("인증번호 요청!");
+                                        fp.fAuth.verifyPhoneNumber(
+                                          phoneNumber: phoneController.text,
+                                          verificationCompleted:
+                                              (PhoneAuthCredential pac) {
+                                            print(pac.smsCode);
+                                            print(pac.token);
+                                            print(pac.verificationId);
+                                            print(pac.providerId);
+                                            print(pac.signInMethod);
+                                          },
+                                          verificationFailed:
+                                              (FirebaseException fe) {
+                                            print(fe.message);
+                                          },
+                                          codeSent: (String s, int i) {
+                                            print("codeSent");
+                                            print(s);
+                                            print(i);
+                                          },
+                                          codeAutoRetrievalTimeout: (String s) {
+                                            print("codeAuto");
+                                            print(s);
+                                          },
+                                        );
+                                      },
+                                      child: Center(
+                                        child: Text(
+                                          "인증번호 요청",
+                                          style: TextStyle(
+                                            fontFamily: "Youth",
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, padding, 0, 0),
                           ),
-                          joinButtonRow("인증번호", "", authController, avdWidth),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                    width: 1.0, color: Colors.grey[400]),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: avdWidth / 4,
+                                  child: Text(
+                                    "인증번호",
+                                    style: TextStyle(
+                                        fontFamily: "Youth", fontSize: 20),
+                                  ),
+                                ),
+                                Container(
+                                  width: avdWidth / 5,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: "",
+                                      border: InputBorder.none,
+                                    ),
+                                    controller: authController,
+                                    onChanged: (value) {},
+                                    validator: (value) {
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                ),
+                                Container(
+                                  width: avdWidth / 4,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    color: Colors.yellow[700],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      splashColor: Colors.white,
+                                      onTap: () async {
+                                        print("인증번호 확인!");
+                                        //PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode)
+                                      },
+                                      child: Center(
+                                        child: Text(
+                                          "인증번호 확인",
+                                          style: TextStyle(
+                                            fontFamily: "Youth",
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, padding, 0, 0),
                           ),
@@ -117,8 +268,8 @@ class SignUpPageState extends State<SignUpPage> {
                       print(phoneController.text);
                       if (_formkey.currentState.validate()) {
                         print("fffff");
-                        fp.signUpWithEmail(
-                            emailController.text, passController.text);
+                        //fp.signUpWithEmail(
+                        //    emailController.text, passController.text);
                       } else {
                         fp.signUpWithEmail(
                             emailController.text, passController.text);
@@ -224,8 +375,6 @@ class SignUpPageState extends State<SignUpPage> {
 
   joinButtonRow(String title, String hintText,
       TextEditingController textEditingController, double avdWidth) {
-    String buttonName = "요청";
-    if (title == "인증번호") buttonName = "확인";
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -270,12 +419,13 @@ class SignUpPageState extends State<SignUpPage> {
               color: Colors.transparent,
               child: InkWell(
                 splashColor: Colors.white,
-                onTap: () {
+                onTap: () async {
                   print("인증번호 요청!");
+                  print(textEditingController.text);
                 },
                 child: Center(
                   child: Text(
-                    "인증번호 " + buttonName,
+                    "인증번호 확인",
                     style: TextStyle(
                       fontFamily: "Youth",
                       fontSize: 15,
@@ -288,6 +438,31 @@ class SignUpPageState extends State<SignUpPage> {
           ),
         ],
       ),
+    );
+  }
+
+  test() {
+    fp.fAuth.verifyPhoneNumber(
+      phoneNumber: "textEditingController.text",
+      verificationCompleted: (PhoneAuthCredential pac) {
+        print(pac.smsCode);
+        print(pac.token);
+        print(pac.verificationId);
+        print(pac.providerId);
+        print(pac.signInMethod);
+      },
+      verificationFailed: (FirebaseException fe) {
+        print(fe.message);
+      },
+      codeSent: (String s, int i) {
+        print("codeSent");
+        print(s);
+        print(i);
+      },
+      codeAutoRetrievalTimeout: (String s) {
+        print("codeAuto");
+        print(s);
+      },
     );
   }
 }
