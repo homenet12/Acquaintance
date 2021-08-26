@@ -89,7 +89,7 @@ class SignUpPageState extends State<SignUpPage> {
                                   width: avdWidth / 5,
                                   child: TextFormField(
                                     decoration: InputDecoration(
-                                      hintText: "+82 10-0000-",
+                                      hintText: "010-0000-",
                                       border: InputBorder.none,
                                     ),
                                     controller: phoneController,
@@ -114,9 +114,13 @@ class SignUpPageState extends State<SignUpPage> {
                                     child: InkWell(
                                       splashColor: Colors.white,
                                       onTap: () async {
+                                        String phone = phoneController.text;
+                                        phone = phone.substring(1);
+                                        phone = "+82 " + phone;
+
                                         print("인증번호 요청!");
                                         fp.fAuth.verifyPhoneNumber(
-                                          phoneNumber: phoneController.text,
+                                          phoneNumber: phone,
                                           verificationCompleted:
                                               (PhoneAuthCredential pac) {
                                             print(pac.smsCode);

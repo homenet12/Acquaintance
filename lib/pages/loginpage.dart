@@ -1,6 +1,7 @@
 import 'package:acquaintance/pages/helppage.dart';
 import 'package:acquaintance/pages/signuppage.dart';
 import 'package:acquaintance/services/FirebaseProvider.dart';
+import 'package:acquaintance/services/user/userservice.dart';
 import 'package:acquaintance/widgets/user/loginform.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,13 +15,16 @@ class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
+  FocusNode emailFocus = FocusNode();
   FirebaseProvider fp;
+  UserService us;
 
   @override
   Widget build(BuildContext context) {
     final avdHeight = MediaQuery.of(context).size.height;
     final avdWidth = MediaQuery.of(context).size.width;
     fp = Provider.of<FirebaseProvider>(context);
+    us = UserService();
 
     return Scaffold(
       body: Container(
@@ -73,57 +77,81 @@ class LoginPageState extends State<LoginPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text("이메일",
-                                  style: TextStyle(
-                                      fontFamily: "Youth", fontSize: 20)),
-                              Container(
-                                width: avdWidth / 2.1,
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                    hintText: "email@email.com",
-                                  ),
-                                  controller: emailController,
-                                  onChanged: (email) {},
-                                  validator: (email) {
-                                    if (email.isEmpty) {
-                                      return '이메일을 입력해주세요.';
-                                    }
-                                    return null;
-                                  },
-                                  textInputAction: TextInputAction.next,
-                                ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                    width: 1.0, color: Colors.grey[400]),
                               ),
-                            ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text("이메일",
+                                    style: TextStyle(
+                                        fontFamily: "Youth", fontSize: 20)),
+                                Container(
+                                  width: avdWidth / 2.1,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: "email@email.com",
+                                      border: InputBorder.none,
+                                    ),
+                                    controller: emailController,
+                                    onChanged: (email) {},
+                                    validator: (email) {
+                                      if (email.isEmpty) {
+                                        return '이메일을 입력해주세요.';
+                                      }
+                                      return null;
+                                    },
+                                    textInputAction: TextInputAction.next,
+                                    focusNode: emailFocus,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text("비밀번호",
-                                  style: TextStyle(
-                                      fontFamily: "Youth", fontSize: 20)),
-                              Container(
-                                width: avdWidth / 2.1,
-                                child: TextFormField(
-                                  controller: passController,
-                                  obscureText: true,
-                                  onChanged: (password) {
-                                    setState(() {});
-                                  },
-                                  validator: (password) {
-                                    if (password.isEmpty) {
-                                      return '비밀번호를 입력해주세요.';
-                                    }
-                                    return null;
-                                  },
-                                ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                    width: 1.0, color: Colors.grey[400]),
                               ),
-                            ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text("비밀번호",
+                                    style: TextStyle(
+                                        fontFamily: "Youth", fontSize: 20)),
+                                Container(
+                                  width: avdWidth / 2.1,
+                                  child: TextFormField(
+                                    controller: passController,
+                                    obscureText: true,
+                                    onChanged: (password) {
+                                      setState(() {});
+                                    },
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
+                                    validator: (password) {
+                                      if (password.isEmpty) {
+                                        return '비밀번호를 입력해주세요.';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -159,9 +187,16 @@ class LoginPageState extends State<LoginPage> {
                     splashColor: Colors.white,
                     onTap: () async {
                       print("Login!!");
+                      String email = emailController.text;
+                      String pass = passController.text;
+                      bool isEmail = us.emailValidation(email);
 
-                      bool isLogin = await fp.signInWithEmail(
-                          emailController.text, passController.text);
+                      if (!isEmail) {
+                        callSnackBar("이메일 형식이 맞지 않습니다.", context, emailFocus);
+                        return;
+                      }
+
+                      bool isLogin = await fp.signInWithEmail(email, pass);
                       if (isLogin) {
                         Navigator.push(
                           context,
@@ -171,16 +206,8 @@ class LoginPageState extends State<LoginPage> {
                         );
                       } else {
                         print("login 실패");
-                        final snackBar = SnackBar(
-                          content: const Text('아이디 혹은 비밀번호가 맞지 않습니다.'),
-                          action: SnackBarAction(
-                            label: 'Undo',
-                            onPressed: () {
-                              // Some code to undo the change.
-                            },
-                          ),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        callSnackBar(
+                            "아이디 혹은 비밀번호가 맞지않습니다.", context, emailFocus);
                       }
                     },
                     child: Center(
@@ -230,4 +257,17 @@ class LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+callSnackBar(String text, BuildContext context, FocusNode focus) {
+  final snackBar = SnackBar(
+    content: Text(text),
+    action: SnackBarAction(
+      label: '확인',
+      onPressed: () {
+        focus.requestFocus();
+      },
+    ),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
